@@ -21,7 +21,8 @@ public class SegmentedEdge extends SegmentedBase{
 	    temp.div(segs-1);
 	    for (int i=0; i<segs; ++i) {
 	      if (i != 0 && i < segs-1){
-	    	  nodes[i] = new PVector(v0.x + temp.x*i + getChaos(chaosSeed, ChaosMode.RANDOM), v0.y + temp.y*i + getChaos(chaosSeed, ChaosMode.RANDOM));
+	    	  nodes[i] = new PVector(v0.x + temp.x*i + getChaos(chaosSeed, ChaosMode.RANDOM), 
+	    			  v0.y + temp.y*i + getChaos(chaosSeed, ChaosMode.RANDOM), v0.z + temp.z*i + getChaos(chaosSeed, ChaosMode.RANDOM));
 	      } else if (i==0){
 	    	  nodes[i] = v0;
 	      } else {
@@ -36,7 +37,7 @@ public class SegmentedEdge extends SegmentedBase{
 	    p.noFill();
 	    p.beginShape();
 	    for (int i=0; i<nodes.length; ++i) {
-	      p.vertex(nodes[i].x, nodes[i].y);
+	      p.vertex(nodes[i].x, nodes[i].y, nodes[i].z);
 	    }
 	    p.endShape();
 	  }
