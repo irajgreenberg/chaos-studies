@@ -35,3 +35,6 @@ local.properties
 
 #Sublime
 ChaosStudies.sublime-workspace
+
+#OSX
+.DS_Store
