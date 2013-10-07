@@ -37,11 +37,15 @@ public class ChaosTest extends PApplet{
 		background(255);
 		pushMatrix();
 		translate(width/4, height/4);
+		rotateY(frameCount*PI/720);
+		rotateX(-frameCount*PI/560);
 		r01.draw();
 		popMatrix();
 
 		pushMatrix();
 		translate(width/4, height*.675f);
+		rotateY(-frameCount*PI/720);
+		rotateX(frameCount*PI/560);
 		e01.draw();
 		popMatrix();
 		
