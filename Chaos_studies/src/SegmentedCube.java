@@ -21,15 +21,15 @@ public class SegmentedCube extends SegmentedBase {
 	public void init() {
 
 		/* 
-		 
+
 		   6-------4
 		 '  '     ' ' 
 		0----'---2   '
 		 '    7--'----5
 		  '  '    '  '
 		   1-------3
-		   
-		   
+
+
 		 */
 		// vertices
 		float theta = -p.PI/4;
@@ -44,45 +44,43 @@ public class SegmentedCube extends SegmentedBase {
 		}
 
 		// Edges
-		// brute 
-//		edges[0] = new SegmentedEdge(p, verts[0], verts[1], segs);
-//		edges[1] = new SegmentedEdge(p, verts[2], verts[3], segs);
-//		edges[2] = new SegmentedEdge(p, verts[4], verts[5], segs);
-//		edges[3] = new SegmentedEdge(p, verts[6], verts[7], segs);
-//		
-//		edges[4] = new SegmentedEdge(p, verts[0], verts[2], segs);
-//		edges[5] = new SegmentedEdge(p, verts[2], verts[4], segs);
-//		edges[6] = new SegmentedEdge(p, verts[4], verts[6], segs);
-//		edges[7] = new SegmentedEdge(p, verts[6], verts[0], segs);
-//		
-//		edges[8] = new SegmentedEdge(p, verts[1], verts[3], segs);
-//		edges[9] = new SegmentedEdge(p, verts[3], verts[5], segs);
-//		edges[10] = new SegmentedEdge(p, verts[5], verts[7], segs);
-//		edges[11] = new SegmentedEdge(p, verts[7], verts[1], segs);
-		
-		
-		 // nasty 
-		int j = 0;
-		for(int i=0; i<verts.length; i+=2){
-			// verticals
-			edges[j++] = new SegmentedEdge(p, verts[i], verts[i+1], segs);
-			
-			// top
-			if(i==verts.length-2){
-				edges[j++] = new SegmentedEdge(p, verts[i], verts[0], segs);
-			} else {
-				edges[j++] = new SegmentedEdge(p, verts[i], verts[i+2], segs);
-			}
-		}
+		// brute force & cumb goodness
+		edges[0] = new SegmentedEdge(p, verts[0], verts[1], segs);
+		edges[1] = new SegmentedEdge(p, verts[2], verts[3], segs);
+		edges[2] = new SegmentedEdge(p, verts[4], verts[5], segs);
+		edges[3] = new SegmentedEdge(p, verts[6], verts[7], segs);
 
-		// bottom 
-		for(int i=1; i<verts.length; i+=2){
-			if(i==verts.length-1){
-				edges[j++] = new SegmentedEdge(p, verts[i], verts[1], segs);
-			} else {
-				edges[j++] = new SegmentedEdge(p, verts[i], verts[i+2], segs);
-			}
-		}
+		edges[4] = new SegmentedEdge(p, verts[0], verts[2], segs);
+		edges[5] = new SegmentedEdge(p, verts[2], verts[4], segs);
+		edges[6] = new SegmentedEdge(p, verts[4], verts[6], segs);
+		edges[7] = new SegmentedEdge(p, verts[6], verts[0], segs);
+
+		edges[8] = new SegmentedEdge(p, verts[1], verts[3], segs);
+		edges[9] = new SegmentedEdge(p, verts[3], verts[5], segs);
+		edges[10] = new SegmentedEdge(p, verts[5], verts[7], segs);
+		edges[11] = new SegmentedEdge(p, verts[7], verts[1], segs);
+
+
+		// nasty & too clever
+		//		int j = 0;
+		//		for(int i=0, k=1; i<verts.length; i+=2, k+=2){
+		//			// verticals
+		//			edges[j++] = new SegmentedEdge(p, verts[i], verts[i+1], segs);
+		//
+		//			// top
+		//			if(i==verts.length-2){
+		//				edges[j++] = new SegmentedEdge(p, verts[i], verts[0], segs);
+		//			} else {
+		//				edges[j++] = new SegmentedEdge(p, verts[i], verts[i+2], segs);
+		//			}
+		//
+		//			// bot 
+		//			if(k==verts.length-1){
+		//				edges[j++] = new SegmentedEdge(p, verts[k], verts[1], segs);
+		//			} else {
+		//				edges[j++] = new SegmentedEdge(p, verts[k], verts[k+2], segs);
+		//			}
+		//		}
 
 		// edge chaos
 		for(int i=0; i<edges.length; ++i){

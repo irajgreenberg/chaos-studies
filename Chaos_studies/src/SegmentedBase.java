@@ -14,6 +14,8 @@ abstract class SegmentedBase {
 		RANDOM, QUADRATIC, CUBIC, PERLIN
 	};
 
+	public SegmentedBase(){}
+			
 	public SegmentedBase(PApplet p, int segs){
 		this.p = p;
 		this.segs = segs;
