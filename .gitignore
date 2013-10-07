@@ -32,3 +32,6 @@ local.properties
 *.jar
 *.war
 *.ear
+
+#Sublime
+ChaosStudies.sublime-workspace
