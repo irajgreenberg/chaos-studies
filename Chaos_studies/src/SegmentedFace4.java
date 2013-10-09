@@ -6,7 +6,7 @@ public class SegmentedFace4 extends SegmentedBase {
 
 	PVector v0, v1, v2, v3;
 	PVector[][] verts;
-	ArrayList<SegmentedEdge> edges;
+	SegmentedEdge[] edges = new SegmentedEdge[4];
 	ArrayList<Face3> faces;
 
 
@@ -48,7 +48,6 @@ public class SegmentedFace4 extends SegmentedBase {
 	public void init() {
 		int edgeCount = segs+2;
 		verts = new PVector[edgeCount][edgeCount];
-		edges = new ArrayList<SegmentedEdge>();
 		faces = new ArrayList<Face3>();
 
 		int totalVerts = 4 + segs*segs + segs*4;
@@ -64,6 +63,18 @@ public class SegmentedFace4 extends SegmentedBase {
 		PVector[] rtEdgeVerts = new PVector[edgeCount];
 
 
+		/*****************************************************
+		 * NOTE: Need to re-implement faces using edge verts, 
+		 * to ensure edge alignment on polyhedra. 10-9-13
+		 ****************************************************/
+		// calc edges
+		edges[0] = new SegmentedEdge(p, v0, v1, segs); // left
+		edges[1] = new SegmentedEdge(p, v1, v2, segs); // bot
+		edges[2] = new SegmentedEdge(p, v3, v2, segs); // rt
+		edges[3] = new SegmentedEdge(p, v0, v3, segs); // top
+		/****************************************************/
+
+		
 		// calc left and right edge verts
 		PVector lftEdgeDelta = new PVector((v1.x-v0.x)/cols, (v1.y-v0.y)/cols, (v1.z-v0.z)/cols);
 		PVector rtEdgeDelta = new PVector((v2.x-v3.x)/cols, (v2.y-v3.y)/cols, (v2.z-v3.z)/cols);

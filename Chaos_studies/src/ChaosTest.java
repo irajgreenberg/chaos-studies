@@ -33,9 +33,9 @@ public class ChaosTest extends PApplet {
 		c01.setChaos(2.75f);
 		
 		
-		edgeSegs = 8;
+		edgeSegs = 20;
 		sf01 = new SegmentedFace4(this, edgeSegs, new PVector(-150, -100, -20), new PVector(150, -100, 5), new PVector(100, 120, 30), new PVector(-40, 190, -80));
-		sf01.setChaos(0f);
+		sf01.setChaos(6.25f);
 	}
 
 	public void draw() {

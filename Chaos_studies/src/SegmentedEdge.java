@@ -12,6 +12,7 @@ public class SegmentedEdge extends SegmentedBase{
 	    nodes = new PVector[segs];
 	    init();
 	  }
+	  
 
 	  @Override
 	  public void init() {
