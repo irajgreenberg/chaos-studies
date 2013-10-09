@@ -3,8 +3,9 @@ import processing.data.*;
 import processing.event.*;
 import processing.opengl.*;
 
-public class ChaosTest extends PApplet{
+public class ChaosTest extends PApplet {
 
+	private static final long serialVersionUID = 6815900124968903046L;
 	private SegmentedBase r01;
 	private SegmentedBase e01;
 	private SegmentedBase c01;
