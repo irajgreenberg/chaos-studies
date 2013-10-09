@@ -5,14 +5,19 @@ import processing.core.*;
 public class SegmentedFace4 extends SegmentedBase {
 
 	PVector v0, v1, v2, v3;
-	ArrayList<PVector> verts;
+	PVector[][] verts;
 	ArrayList<SegmentedEdge> edges;
-	ArrayList<Face4> faces;
+	ArrayList<Face3> faces;
 
 
 	public SegmentedFace4(){}
 
-	// Requirement: points passed in CW/CCW order only
+	// Requirement: points passed in CCW order only
+	/*
+	 0--3
+	 |  |
+	 1--2
+	 */ 
 	// Note: if doing "for real" test for this
 	public SegmentedFace4(PApplet p, int segs, PVector v0, PVector v1, PVector v2,  PVector v3) {
 		super(p, segs);
@@ -20,9 +25,15 @@ public class SegmentedFace4 extends SegmentedBase {
 		this.v1 = v1;
 		this.v2 = v2;
 		this.v3 = v3;
+		init();
 	}
 
-	// Requirement: points passed in CW/CCW order only
+	// Requirement: points passed in CCW order only
+	/*
+	 0--3
+	 |  |
+	 1--2
+	 */ 
 	// Note: if doing "for real" test for this
 	public SegmentedFace4(PApplet p, int segs, PVector[] pts) {
 		super(p, segs);
@@ -30,123 +41,82 @@ public class SegmentedFace4 extends SegmentedBase {
 		this.v1 = pts[1];
 		this.v2 = pts[2];
 		this.v3 = pts[3];
+		init();
 	}
 
 	@Override
 	public void init() {
-		verts = new ArrayList<PVector>();
+		int edgeCount = segs+2;
+		verts = new PVector[edgeCount][edgeCount];
 		edges = new ArrayList<SegmentedEdge>();
-		faces = new ArrayList<Face4>();
+		faces = new ArrayList<Face3>();
 
 		int totalVerts = 4 + segs*segs + segs*4;
+		int cols = segs + 1;
 
-
-		// lame-ass approach, but...
-		int edgeCount = segs+2;
-		PVector[] topEdgeVerts = new PVector[edgeCount];
+		/*
+		 0--3
+		 |  |
+		 1--2
+		 */ 
+		// bilinear interpolation of face vertices
+		PVector[] lftEdgeVerts = new PVector[edgeCount];
 		PVector[] rtEdgeVerts = new PVector[edgeCount];
-		PVector[] botEdgeVerts = new PVector[edgeCount];
-		PVector[] ltEdgeVerts = new PVector[edgeCount];
-
-		PVector topDelta = new PVector(v1.x-v0.x, v1.y-v0.y, v1.z-v0.z);
-		PVector rtDelta = new PVector(v2.x-v1.x, v2.y-v1.y, v2.z-v1.z);
-		PVector botDelta = new PVector(v2.x-v3.x, v2.y-v3.y, v2.z-v3.z);
-		PVector ltDelta = new PVector(v3.x-v0.x, v3.y-v0.y, v3.z-v0.z);
-		topDelta.div(segs+1);
-		rtDelta.div(segs+1);
-		botDelta.div(segs+1);
-		ltDelta.div(segs+1);
 
 
-		for(int i=0; i<edgeCount; i++){
-			topEdgeVerts[i] = new PVector(v0.x + topDelta.x*i, v0.y + topDelta.y*i, v0.z + topDelta.z*i );
-			rtEdgeVerts[i] = new PVector(v1.x + rtDelta.x*i, v1.y + rtDelta.y*i, v1.z + rtDelta.z*i );
-			botEdgeVerts[i] = new PVector(v3.x + botDelta.x*i, v3.y + botDelta.y*i, v3.z + botDelta.z*i );
-			ltEdgeVerts[i] = new PVector(v0.x + ltDelta.x*i, v0.y + ltDelta.y*i, v0.z + ltDelta.z*i );
+		// calc left and right edge verts
+		PVector lftEdgeDelta = new PVector((v1.x-v0.x)/cols, (v1.y-v0.y)/cols, (v1.z-v0.z)/cols);
+		PVector rtEdgeDelta = new PVector((v2.x-v3.x)/cols, (v2.y-v3.y)/cols, (v2.z-v3.z)/cols);
+
+		for(int i=0; i<edgeCount; ++i){
+			lftEdgeVerts[i] = new PVector(v0.x + lftEdgeDelta.x*i, v0.y + lftEdgeDelta.y*i, v0.z + lftEdgeDelta.z*i);
+			rtEdgeVerts[i] = new PVector(v3.x + rtEdgeDelta.x*i, v3.y + rtEdgeDelta.y*i, v3.z + rtEdgeDelta.z*i);
 		}
 
-		for(int i=0; i<edgeCount; i++){
-			for(int j=0; j<edgeCount; j++){
-				verts[i] = topEdgeVerts[i] = new PVector(v0.x + topDelta.x*i, v0.y + topDelta.y*i, v0.z + topDelta.z*i );
-				rtEdgeVerts[i] = new PVector(v1.x + rtDelta.x*i, v1.y + rtDelta.y*i, v1.z + rtDelta.z*i );
-				botEdgeVerts[i] = new PVector(v3.x + botDelta.x*i, v3.y + botDelta.y*i, v3.z + botDelta.z*i );
-				ltEdgeVerts[i] = new PVector(v0.x + ltDelta.x*i, v0.y + ltDelta.y*i, v0.z + ltDelta.z*i );
+		// interpolate between edges
+		for(int i=0; i<edgeCount; ++i){
+			// calc delta for each row since no guarantee of orthogonality
+			PVector dynamicXDelta = new PVector((rtEdgeVerts[i].x-lftEdgeVerts[i].x)/cols, (rtEdgeVerts[i].y-lftEdgeVerts[i].y)/cols, (rtEdgeVerts[i].z-lftEdgeVerts[i].z)/cols);
+			for(int j=0; j<edgeCount; ++j){
+				verts[i][j] = new PVector(lftEdgeVerts[i].x + dynamicXDelta.x*j + getChaos(chaosSeed, ChaosMode.RANDOM), lftEdgeVerts[i].y + dynamicXDelta.y*j + getChaos(chaosSeed, ChaosMode.RANDOM), lftEdgeVerts[i].z + dynamicXDelta.z*j + getChaos(chaosSeed, ChaosMode.RANDOM));
 			}
 		}
 
-		// calc deltas between corner vertices based on seg count
-
-
-		// calc temp axial verts
-		for(int i=0; i<segs+2; ++i){ 
-
-		}
-
-
-		for(int i=0; i<segs+2; ++i){ // across
-			for(int j=0; j<segs+2; ++j){ // down
-
-
-				v0 + xgap*i + ygap*j
-				verts.add(new PVector(v0.x + v0_v1Delta.x*i, v0.y + v0_v1Delta.y*i, v0.z + v0_v1Delta.z*i));
+		// create faces from vertices, winding CCW
+		for(int i=0; i<edgeCount-1; ++i){
+			for(int j=0; j<edgeCount-1; ++j){
+				faces.add(new Face3(verts[i][j], verts[i+1][j], verts[i+1][j+1]));
+				faces.add(new Face3(verts[i][j], verts[i+1][j+1], verts[i][j+1]));
 			}
 		}
-
-		// FIX: This should be nested
-		for(int i=0; i<totalVerts; ++i){
-			// first store face corners
-			if(i==0) {
-				verts.add(v0); // top lft
-			} else if(i == segs+1){ // top rt
-				verts.add(v1);
-			} else if(i == totalVerts-1){ // bot rt
-				verts.add(v2);
-			} else if(i == totalVerts-2 - segs){ // bot lft
-				verts.add(v3);
-			} else { // now all the rest of the verts
-				verts.add(new PVector()); // --> START HERE
-			}
-		}
+		
 	}
-
-
-	//	public void init() {
-	//	verts = new ArrayList<PVector>();
-	//	edges = new ArrayList<SegmentedEdge>();
-	//	faces = new ArrayList<Face4>();
-
-	//	int totalVerts = 4 + segs*segs + segs*4;
-
-	//	// calc deltas between corner vertices based on seg count
-	//	PVector v0_v1Delta = new PVector(v1.x-v0.x, v1.y-v0.y, v1.z-v0.z);
-	//	PVector v1_v2Delta = new PVector(v2.x-v1.x, v2.y-v1.y, v2.z-v1.z);
-	//	PVector v2_v3Delta = new PVector(v3.x-v2.x, v3.y-v2.y, v3.z-v2.z);
-	//	PVector v3_v0Delta = new PVector(v0.x-v3.x, v0.y-v3.y, v0.z-v3.z);
-	//	v0_v1Delta.div(segs+1);
-	//	v1_v2Delta.div(segs+1);
-	//	v2_v3Delta.div(segs+1);
-	//	v3_v0Delta.div(segs+1);
-
-	//	// FIX: This should be nested
-	//	for(int i=0; i<totalVerts; ++i){
-	//	// first store face corners
-	//	if(i==0) {
-	//	verts.add(v0); // top lft
-	//	} else if(i == segs+1){ // top rt
-	//	verts.add(v1);
-	//	} else if(i == totalVerts-1){ // bot rt
-	//	verts.add(v2);
-	//	} else if(i == totalVerts-2 - segs){ // bot lft
-	//	verts.add(v3);
-	//	} else { // now all the rest of the verts
-	//	verts.add(new PVector()); // --> START HERE
-	//	}
-	//	}
-	//	}
 
 	@Override
 	public void draw() {
-		// TODO Auto-generated method stub
+		p.noStroke();
+		p.fill(200, 45, 120);
+		p.beginShape(p.TRIANGLES);
+		for(int i=0; i<faces.size(); ++i){
+			p.vertex(faces.get(i).getV0().x, faces.get(i).getV0().y, faces.get(i).getV0().z);
+			p.vertex(faces.get(i).getV1().x, faces.get(i).getV1().y, faces.get(i).getV1().z);
+			p.vertex(faces.get(i).getV2().x, faces.get(i).getV2().y, faces.get(i).getV2().z);
+		}
+		p.endShape();
+		p.noFill();
+	}
+
+	public void drawVertices() {
+		p.noFill();
+		p.strokeWeight(4);
+		p.beginShape(p.POINTS);
+		for(int i=0; i<verts.length; ++i){
+			for(int j=0; j<verts[i].length; ++j){
+				p.vertex(verts[i][j].x, verts[i][j].y, verts[i][j].z);
+			}
+		}
+		p.endShape();
+		p.strokeWeight(1);
 
 	}
 

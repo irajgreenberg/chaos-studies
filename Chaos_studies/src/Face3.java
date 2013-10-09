@@ -37,6 +37,7 @@ public class Face3 {
 		norm.normalize();
 	}
 	
+	
 	// getters/setters
 	public PVector getV0() {
 		return v0;

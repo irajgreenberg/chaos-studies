@@ -8,11 +8,10 @@ public class ChaosTest extends PApplet{
 	private SegmentedBase r01;
 	private SegmentedBase e01;
 	private SegmentedBase c01;
+	private SegmentedBase sf01;
 
 	public void setup() {
 		size(1024, 768, P3D);
-		stroke(0, 105);
-		strokeWeight(.75f);
 
 		// rect
 		float w = 350; float h = 100;
@@ -31,10 +30,19 @@ public class ChaosTest extends PApplet{
 		edgeSegs = 15;
 		c01 = new SegmentedCube(this, w, h, d, edgeSegs);
 		c01.setChaos(2.75f);
+		
+		
+		edgeSegs = 8;
+		sf01 = new SegmentedFace4(this, edgeSegs, new PVector(-150, -100, -20), new PVector(150, -100, 5), new PVector(100, 120, 30), new PVector(-40, 190, -80));
+		sf01.setChaos(0f);
 	}
 
 	public void draw() {
 		background(255);
+		
+		stroke(0, 105);
+		strokeWeight(.75f);
+		
 		pushMatrix();
 		translate(width/4, height/4);
 		rotateY(frameCount*PI/720);
@@ -54,6 +62,17 @@ public class ChaosTest extends PApplet{
 		rotateY(frameCount*PI/720);
 		rotateX(frameCount*PI/560);
 		c01.draw();
+		popMatrix();
+		
+		lightSpecular(255, 255, 255);
+		directionalLight(50, 50, 50, 0, 0, -1);
+		specular(255, 255, 255);
+		
+		pushMatrix();
+		translate(width*.75f, height*.675f, -30);
+		rotateY(frameCount*PI/400);
+		rotateX(-frameCount*PI/560);
+		sf01.draw();
 		popMatrix();
 	}
 
