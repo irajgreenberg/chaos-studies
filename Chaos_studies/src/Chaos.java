@@ -3,9 +3,9 @@ import processing.data.*;
 import processing.event.*;
 import processing.opengl.*;
 
-public class ChaosTest extends PApplet {
+public class Chaos extends PApplet {
 
-	private static final long serialVersionUID = 6815900124968903046L;
+//	private static final long serialVersionUID = 6815900124968903046L;
 	private SegmentedBase r01;
 	private SegmentedBase e01;
 	private SegmentedBase c01;
@@ -13,6 +13,7 @@ public class ChaosTest extends PApplet {
 
 	public void settings() {
 		size(1024, 768, P3D);
+//		fullScreen(P3D, SPAN);
 	}
 	
 	public void setup() {
@@ -77,10 +78,6 @@ public class ChaosTest extends PApplet {
 		rotateX(-frameCount*PI/560);
 		sf01.draw();
 		popMatrix();
-	}
-
-	public static void main(String args[]) {
-		PApplet.main(new String[] { "--present", "ChaosTest" });
 	}
 
 }
