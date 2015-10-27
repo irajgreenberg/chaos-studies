@@ -11,9 +11,11 @@ public class ChaosTest extends PApplet {
 	private SegmentedBase c01;
 	private SegmentedBase sf01;
 
-	public void setup() {
+	public void settings() {
 		size(1024, 768, P3D);
-
+	}
+	
+	public void setup() {
 		// rect
 		float w = 350; float h = 100;
 		int edgeSegs = 10; int rectSegs = 20;
@@ -40,7 +42,7 @@ public class ChaosTest extends PApplet {
 
 	public void draw() {
 		background(255);
-		
+		line(0, 0, width, height);
 		stroke(0, 105);
 		strokeWeight(.75f);
 		
