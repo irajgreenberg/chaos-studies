@@ -3,7 +3,7 @@ import processing.data.*;
 import processing.event.*;
 import processing.opengl.*;
 
-public class Chaos extends PApplet {
+public class ChaosSketch extends PApplet {
 
 //	private static final long serialVersionUID = 6815900124968903046L;
 	private SegmentedBase r01;
