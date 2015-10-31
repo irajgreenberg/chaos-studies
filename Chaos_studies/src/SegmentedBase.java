@@ -1,5 +1,9 @@
+/** SegmentedBase.java
+ * TODO
+ * @author Ira Greenberg
+ * @since 0.0.0
+ */
 import processing.core.*;
-
 
 abstract class SegmentedBase {
 
@@ -14,9 +18,9 @@ abstract class SegmentedBase {
 		RANDOM, QUADRATIC, CUBIC, PERLIN
 	};
 
-	public SegmentedBase(){}
+	public SegmentedBase() {}
 			
-	public SegmentedBase(PApplet p, int segs){
+	public SegmentedBase(PApplet p, int segs) {
 		this.p = p;
 		this.segs = segs;
 	}
@@ -36,4 +40,5 @@ abstract class SegmentedBase {
 
 		return chaos;
 	}
+	
 }

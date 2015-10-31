@@ -1,6 +1,10 @@
+/** SegmentedFace4.java
+ * TODO
+ * @author Ira Greenberg
+ * @since 0.0.0
+ */
 import java.util.ArrayList;
 import processing.core.*;
-
 
 public class SegmentedFace4 extends SegmentedBase {
 
@@ -9,8 +13,7 @@ public class SegmentedFace4 extends SegmentedBase {
 	SegmentedEdge[] edges = new SegmentedEdge[4];
 	ArrayList<Face3> faces;
 
-
-	public SegmentedFace4(){}
+	public SegmentedFace4() {}
 
 	// Requirement: points passed in CCW order only
 	/*
@@ -62,7 +65,6 @@ public class SegmentedFace4 extends SegmentedBase {
 		PVector[] lftEdgeVerts = new PVector[edgeCount];
 		PVector[] rtEdgeVerts = new PVector[edgeCount];
 
-
 		/*****************************************************
 		 * NOTE: Need to re-implement faces using edge verts, 
 		 * to ensure edge alignment on polyhedra. 10-9-13
@@ -73,34 +75,32 @@ public class SegmentedFace4 extends SegmentedBase {
 		edges[2] = new SegmentedEdge(p, v3, v2, segs); // rt
 		edges[3] = new SegmentedEdge(p, v0, v3, segs); // top
 		/****************************************************/
-
 		
 		// calc left and right edge verts
 		PVector lftEdgeDelta = new PVector((v1.x-v0.x)/cols, (v1.y-v0.y)/cols, (v1.z-v0.z)/cols);
 		PVector rtEdgeDelta = new PVector((v2.x-v3.x)/cols, (v2.y-v3.y)/cols, (v2.z-v3.z)/cols);
 
-		for(int i=0; i<edgeCount; ++i){
+		for( int i = 0; i < edgeCount; ++i) {
 			lftEdgeVerts[i] = new PVector(v0.x + lftEdgeDelta.x*i, v0.y + lftEdgeDelta.y*i, v0.z + lftEdgeDelta.z*i);
 			rtEdgeVerts[i] = new PVector(v3.x + rtEdgeDelta.x*i, v3.y + rtEdgeDelta.y*i, v3.z + rtEdgeDelta.z*i);
 		}
 
 		// interpolate between edges
-		for(int i=0; i<edgeCount; ++i){
+		for (int i = 0; i < edgeCount; ++i) {
 			// calc delta for each row since no guarantee of orthogonality
 			PVector dynamicXDelta = new PVector((rtEdgeVerts[i].x-lftEdgeVerts[i].x)/cols, (rtEdgeVerts[i].y-lftEdgeVerts[i].y)/cols, (rtEdgeVerts[i].z-lftEdgeVerts[i].z)/cols);
-			for(int j=0; j<edgeCount; ++j){
+			for (int j = 0; j < edgeCount; ++j) {
 				verts[i][j] = new PVector(lftEdgeVerts[i].x + dynamicXDelta.x*j + getChaos(chaosSeed, ChaosMode.RANDOM), lftEdgeVerts[i].y + dynamicXDelta.y*j + getChaos(chaosSeed, ChaosMode.RANDOM), lftEdgeVerts[i].z + dynamicXDelta.z*j + getChaos(chaosSeed, ChaosMode.RANDOM));
 			}
 		}
 
 		// create faces from vertices, winding CCW
-		for(int i=0; i<edgeCount-1; ++i){
-			for(int j=0; j<edgeCount-1; ++j){
+		for (int i = 0; i < edgeCount-1; ++i) {
+			for(int j = 0; j < edgeCount-1; ++j) {
 				faces.add(new Face3(verts[i][j], verts[i+1][j], verts[i+1][j+1]));
 				faces.add(new Face3(verts[i][j], verts[i+1][j+1], verts[i][j+1]));
 			}
 		}
-		
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class SegmentedFace4 extends SegmentedBase {
 		p.noStroke();
 		p.fill(200, 45, 120);
 		p.beginShape(p.TRIANGLES);
-		for(int i=0; i<faces.size(); ++i){
+		for (int i = 0; i < faces.size(); ++i) {
 			p.vertex(faces.get(i).getV0().x, faces.get(i).getV0().y, faces.get(i).getV0().z);
 			p.vertex(faces.get(i).getV1().x, faces.get(i).getV1().y, faces.get(i).getV1().z);
 			p.vertex(faces.get(i).getV2().x, faces.get(i).getV2().y, faces.get(i).getV2().z);
@@ -121,14 +121,13 @@ public class SegmentedFace4 extends SegmentedBase {
 		p.noFill();
 		p.strokeWeight(4);
 		p.beginShape(p.POINTS);
-		for(int i=0; i<verts.length; ++i){
-			for(int j=0; j<verts[i].length; ++j){
+		for (int i = 0; i < verts.length; ++i) {
+			for (int j =0 ; j < verts[i].length; ++j) {
 				p.vertex(verts[i][j].x, verts[i][j].y, verts[i][j].z);
 			}
 		}
 		p.endShape();
 		p.strokeWeight(1);
-
 	}
 
 }

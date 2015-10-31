@@ -1,6 +1,10 @@
+/** SegmentedCube.java
+ * TODO
+ * @author Ira Greenberg
+ * @since 0.0.0
+ */
 import java.util.ArrayList;
 import processing.core.*;
-
 
 public class SegmentedCube extends SegmentedBase {
 
@@ -17,23 +21,19 @@ public class SegmentedCube extends SegmentedBase {
 		edges = new SegmentedEdge[12];
 	}
 
+	/* 
+	   6-------4
+	 '  '     ' ' 
+	0----'---2   '
+	 '    7--'----5
+	  '  '    '  '
+	   1-------3
+	 */
 	@Override
 	public void init() {
-
-		/* 
-
-		   6-------4
-		 '  '     ' ' 
-		0----'---2   '
-		 '    7--'----5
-		  '  '    '  '
-		   1-------3
-
-
-		 */
 		// vertices
 		float theta = -p.PI/4;
-		for(int i=0, j=0; i<4; ++i){
+		for (int i = 0, j = 0; i < 4; ++i) {
 			// top verts
 			verts[j++] = new PVector(getChaos(chaosSeed, ChaosMode.RANDOM)+p.sin(theta)*w/2+getChaos(chaosSeed, ChaosMode.RANDOM), 
 					-h/2+getChaos(chaosSeed, ChaosMode.RANDOM), getChaos(chaosSeed, ChaosMode.RANDOM)+p.cos(theta)*d/2+getChaos(chaosSeed, ChaosMode.RANDOM));
@@ -60,7 +60,6 @@ public class SegmentedCube extends SegmentedBase {
 		edges[10] = new SegmentedEdge(p, verts[5], verts[7], segs);
 		edges[11] = new SegmentedEdge(p, verts[7], verts[1], segs);
 
-
 		// nasty & too clever
 		//		int j = 0;
 		//		for(int i=0, k=1; i<verts.length; i+=2, k+=2){
@@ -83,17 +82,16 @@ public class SegmentedCube extends SegmentedBase {
 		//		}
 
 		// edge chaos
-		for(int i=0; i<edges.length; ++i){
+		for (int i = 0; i < edges.length; ++i) {
 			edges[i].setChaos(chaosSeed*.5f); // lazy hack
 		}
-
 	}
 
 	@Override
 	public void draw() {
 		p.pushMatrix();
 		p.noFill();
-		for (int i=0; i<edges.length; ++i) {
+		for (int i = 0; i < edges.length; ++i) {
 			edges[i].draw();
 		}
 		p.popMatrix();

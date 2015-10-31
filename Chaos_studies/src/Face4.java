@@ -1,11 +1,15 @@
+/** Face4.java
+ * TODO
+ * @author Ira Greenberg
+ * @since 0.0.0
+ */
 import processing.core.PVector;
 
 public class Face4 {
+	
 	private PVector v0, v1, v2, v3, norm;
 
-	// cstrs
-	public Face4() {
-	}
+	public Face4() {}
 	
 	public Face4(PVector v0, PVector v1, PVector v2, PVector v3) {
 		this.v0 = v0;
@@ -25,9 +29,8 @@ public class Face4 {
 		calcNorm();
 	}
 	
-	// calculate normalized surface normal
-	// assume planer
-	private void calcNorm(){
+	// Assume planar
+	private void calcNorm() {
 		PVector a = new PVector();
 		PVector b = new PVector();
 		a.set(v2);
@@ -40,8 +43,6 @@ public class Face4 {
 		norm.normalize();
 	}
 	  
-	
-	// getters/setters
 	public PVector getV0() {
 		return v0;
 	}

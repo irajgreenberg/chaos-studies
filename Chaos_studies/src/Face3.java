@@ -1,11 +1,15 @@
+/** Face3.java
+ * TODO
+ * @author Ira Greenberg
+ * @since 0.0.0
+ */
 import processing.core.PVector;
 
 public class Face3 {
+	
 	private PVector v0, v1, v2, norm;
 
-	// cstrs
-	public Face3() {
-	}
+	public Face3() {}
 	
 	public Face3(PVector v0, PVector v1, PVector v2) {
 		this.v0 = v0;
@@ -23,8 +27,7 @@ public class Face3 {
 		calcNorm();
 	}
 	
-	// calculate normalized surface normal
-	private void calcNorm(){
+	private void calcNorm() {
 		PVector a = new PVector();
 		PVector b = new PVector();
 		a.set(v2);
@@ -37,8 +40,6 @@ public class Face3 {
 		norm.normalize();
 	}
 	
-	
-	// getters/setters
 	public PVector getV0() {
 		return v0;
 	}

@@ -1,3 +1,8 @@
+/** Sketch.java
+ * A "pure Java" Processing sketch for tinkering with the Chaos. 
+ * @author Ira Greenberg, Yong Bakos
+ * @since 0.0.1
+ */
 import edu.smu.c3.chaos.*;
 
 public class Sketch extends ChaosSketch {
