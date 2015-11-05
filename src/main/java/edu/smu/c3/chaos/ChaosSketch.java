@@ -12,24 +12,22 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ChaosSketch extends PApplet {
 	
 	// TODO Replace with number generator. Issue #1.
-	static final int DIMENSION_FUCK_FACTOR = 200;
 	static final int COLOR_FUCK_FACTOR = 10;
 	static final int STROKE_FUCK_FACTOR = 4;
 	static final int COORDINATE_FUCK_FACTOR = 50;
 	
 	private ThreadLocalRandom r = ThreadLocalRandom.current();
 	
+	private Chaotic chaotic = new Chaotic();
+	
 	@Override
 	public void size(int width, int height) {
-		super.size(width + r.nextInt(-DIMENSION_FUCK_FACTOR, DIMENSION_FUCK_FACTOR),
-				   height + r.nextInt(-DIMENSION_FUCK_FACTOR, DIMENSION_FUCK_FACTOR));
+		super.size(chaotic.width(width), chaotic.height(height));
 	}
 	
 	@Override
 	public void size(int width, int height, String renderer) {
-		super.size(width + r.nextInt(-DIMENSION_FUCK_FACTOR, DIMENSION_FUCK_FACTOR),
-				   height + r.nextInt(-DIMENSION_FUCK_FACTOR, DIMENSION_FUCK_FACTOR),
-				   renderer);
+		super.size(chaotic.width(width), chaotic.height(height), renderer);
 	}
 	
 	/* Drawing methods */
