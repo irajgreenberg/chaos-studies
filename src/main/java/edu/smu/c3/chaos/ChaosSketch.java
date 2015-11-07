@@ -18,7 +18,7 @@ public class ChaosSketch extends PApplet {
 	
 	private ThreadLocalRandom r = ThreadLocalRandom.current();
 	
-	private Chaotic chaotic = new Chaotic();
+	private Chaotic chaotic = new Chaotic(this);
 	
 	@Override
 	public void size(int width, int height) {
